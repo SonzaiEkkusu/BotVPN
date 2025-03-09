@@ -109,7 +109,7 @@ async function sendMainMenu(ctx) {
       { text: '♻️ Perpanjang Akun', callback_data: 'service_renew' }
     ],
     [
-      { text: '💰 TopUp Saldo', callback_data: 'topup_saldo' },
+      { text: '💰 Donasi', callback_data: 'topup_saldo' },
       { text: '💳 Cek Saldo', callback_data: 'cek_saldo' }
     ],
   ];
@@ -148,12 +148,7 @@ async function sendMainMenu(ctx) {
     console.error('Kesalahan saat mengambil jumlah pengguna:', err.message);
   }
 
-  const messageText = `*Selamat datang di ${NAMA_STORE},
-Powered by FTVPN* 🚀
-Bot VPN serba otomatis untuk membeli
-layanan VPN dengan mudah dan cepat
-Nikmati kemudahan dan kecepatan
-dalam layanan VPN dengan bot kami!
+  const messageText = `*Selamat datang di ${NAMA_STORE}*
 
 ⏳ *Uptime bot:* ${days} Hari
 🌐 *Server tersedia:* ${jumlahServer}
@@ -952,7 +947,7 @@ bot.on('text', async (ctx) => {
           const saldo = user.saldo;
 
           if (saldo < totalHarga) {
-            return ctx.reply('❌ *Saldo Anda tidak mencukupi untuk melakukan transaksi ini.*', { parse_mode: 'Markdown' });
+            return ctx.reply('❌ *Saldo Anda tidak mencukupi untuk membuat akun vpn silahkan melakukan donasi ke @November2k untuk mendapatkan saldo 🙏*', { parse_mode: 'Markdown' });
           }
           if (action === 'create') {
             if (type === 'vmess') {
@@ -1811,28 +1806,20 @@ bot.action('topup_saldo', async (ctx) => {
   try {
     await ctx.answerCbQuery(); 
     const userId = ctx.from.id;
-    console.log(`🔍 User ${userId} memulai proses top-up saldo.`);
+    console.log(`🔍 User ${userId} membuka menu donasi.`);
     
+    const keyboard = {
+      inline_keyboard: [
+        [{ text: '💰 DONASI', url: 'https://t.me/November2kLab/4' }]
+      ]
+    };
 
-    if (!global.depositState) {
-      global.depositState = {};
-    }
-    global.depositState[userId] = { action: 'request_amount', amount: '' };
-    
-    console.log(`🔍 User ${userId} diminta untuk memasukkan jumlah nominal saldo.`);
-    
-
-    const keyboard = keyboard_nomor();
-    
-    await ctx.reply('💰 *Silakan masukkan jumlah nominal saldo yang Anda ingin tambahkan ke akun Anda:*', {
-      reply_markup: {
-        inline_keyboard: keyboard
-      },
+    await ctx.reply('*Untuk bisa membuat akun di bot ini, silakan donasi ke @November2k.*!', {
+      reply_markup: keyboard,
       parse_mode: 'Markdown'
     });
   } catch (error) {
-    console.error('❌ Kesalahan saat memulai proses top-up saldo:', error);
-    await ctx.reply('❌ *GAGAL! Terjadi kesalahan saat memproses permintaan Anda. Silakan coba lagi nanti.*', { parse_mode: 'Markdown' });
+    console.error('❌ Kesalahan saat memproses donasi:', error);
   }
 });
 
