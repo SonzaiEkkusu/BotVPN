@@ -112,6 +112,9 @@ async function sendMainMenu(ctx) {
       { text: '💰 Donasi', callback_data: 'topup_saldo' },
       { text: '💳 Cek Saldo', callback_data: 'cek_saldo' }
     ],
+    [
+      { text: '🗒️ Wildcard', callback_data: 'list_wildcard' }
+    ],
   ];
 
   const uptime = os.uptime();
@@ -1814,12 +1817,33 @@ bot.action('topup_saldo', async (ctx) => {
       ]
     };
 
-    await ctx.reply('*Untuk bisa membuat akun di bot ini, silakan donasi ke @November2k.*!', {
+    await ctx.reply('*Untuk bisa membuat akun di bot ini, silakan donasi ke @November2k.*', {
       reply_markup: keyboard,
       parse_mode: 'Markdown'
     });
   } catch (error) {
     console.error('❌ Kesalahan saat memproses donasi:', error);
+  }
+});
+
+bot.action('list_wildcard', async (ctx) => {
+  try {
+    await ctx.answerCbQuery(); 
+    const userId = ctx.from.id;
+    console.log(`🔍 User ${userId} membuka list wildcard.`);
+    
+    const keyboard = {
+      inline_keyboard: [
+        [{ text: 'LIST WILDCARD', url: 'https://t.me/November2kLab/86' }]
+      ]
+    };
+
+    await ctx.reply('*Jika ingin menambahkan wildcard silahkan pm @November2k*', {
+      reply_markup: keyboard,
+      parse_mode: 'Markdown'
+    });
+  } catch (error) {
+    console.error('❌ Kesalahan saat memproses list:', error);
   }
 });
 
